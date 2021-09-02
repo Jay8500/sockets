@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> Web Socket &nbsp;&nbsp; <span id="assignOnBlur"></span> </h1>
+
+    <div>
+        <span>From Client </span> <br><br><br>
+        <div>
+            Register My Name :- <br>
+            <input type="text" id="myname" name="name" placeholder="register your name client" onblur="assignname()" />
+        </div>
+        <br><br><br>
+        <!-- <p id="doc">hy Server How are you</p> -->
+        <!-- <input type="text" id="clients" placeholder="Write a  messages to server" />
+        <button onclick="callWebSocketServer()">Message To server</button> -->
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div>
+        <span>From Server </span>
+        <p id="server"></p>
+    </div>
+
+    <script>
+
+        // ws.addEventListener("open", () => {
+        //     console.log("we are connected");
+        //     var ss = document.getElementById('doc').innerHTML;
+        //     ws.send(ss)
+        // });
+        // ws.addEventListener("message", ({ data }) => {
+        //     document.getElementById('server').innerHTML = data
+        //     console.log("sever sended data", data)
+        // });
+
+        // var clientMessages = [];
+        function callWebSocketServer() {
+            // alert("sending message to server");
+            // let storingClientMessages = {
+            //     clientMessage: document.getElementById('clients').value
+            // };
+            // document.getElementById('clients').value = "";
+            // clientMessages.push(storingClientMessages);
+            // console.log("client messages memory", clientMessages);
+
+        };
+
+        function assignname() {
+            var ws = new WebSocket("ws://localhost:7000");
+            let assignName = document.getElementById('myname').value;
+            document.getElementById('myname').value = '';
+            document.getElementById('assignOnBlur').innerHTML = assignName;
+
+            ws.addEventListener("open", () => {
+                console.log(`${assignName} was connected`);
+                var registeredUser = assignName;
+                ws.send(registeredUser)
+            });
+
+            ws.addEventListener("message", ({ data }) => {
+                let da = [];
+                da.push(JSON.parse(JSON.stringify(data)));
+                console.log(da)
+                document.getElementById('server').innerHTML = data
+                console.log("sever sended data", data)
+            });
+        }
+    </script>
+</body>
+
+</html>
